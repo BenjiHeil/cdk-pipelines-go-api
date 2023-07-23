@@ -1,8 +1,9 @@
-FROM public.ecr.aws/bitnami/golang:1.19.11-debian-11-r0 AS builder
+FROM public.ecr.aws/docker/library/golang:1.20 AS builder
 COPY . /src
 WORKDIR /src
-RUN GOOS=linux GOARCH=amd64 go build -o main main.go
+RUN make build
+RUN make test && make coverage && make benchmark
 
 FROM public.ecr.aws/lambda/go:1
-COPY --from=builder /src/main ${LAMBDA_TASK_ROOT}
-CMD [ "main" ] 
+COPY --from=builder /src/example-api ${LAMBDA_TASK_ROOT}
+CMD [ "example-api" ] 

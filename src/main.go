@@ -10,35 +10,46 @@ import (
 )
 
 func handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-
-	var response events.APIGatewayProxyResponse
 	switch event.Path {
 	case "/divide":
 		{
-			x, _ := strconv.Atoi(event.QueryStringParameters["x"])
-			y, _ := strconv.Atoi(event.QueryStringParameters["y"])
-			dividend, err := divide(x, y)
-			if err != nil {
-				response = events.APIGatewayProxyResponse{
+			var x, y, dividend int
+			var err error
+			if x, err = strconv.Atoi(event.QueryStringParameters["x"]); err != nil {
+				return events.APIGatewayProxyResponse{
+					StatusCode: 400,
+					Body:       MissingParamError{params: event.QueryStringParameters}.Error(),
+				}, nil
+			}
+
+			if y, err = strconv.Atoi(event.QueryStringParameters["y"]); err != nil {
+				return events.APIGatewayProxyResponse{
+					StatusCode: 400,
+					Body:       MissingParamError{params: event.QueryStringParameters}.Error(),
+				}, nil
+			}
+
+			if dividend, err = Divide(x, y); err != nil {
+				return events.APIGatewayProxyResponse{
 					StatusCode: 400,
 					Body:       err.Error(),
-				}
-			} else {
-				response = events.APIGatewayProxyResponse{
-					StatusCode: 200,
-					Body:       fmt.Sprint(dividend),
-				}
+				}, nil
 			}
+
+			return events.APIGatewayProxyResponse{
+				StatusCode: 200,
+				Body:       fmt.Sprint(dividend),
+			}, nil
+
 		}
 	default:
 		{
-			response = events.APIGatewayProxyResponse{
+			return events.APIGatewayProxyResponse{
 				StatusCode: 200,
 				Body:       "\"Hello from Lambda!\"",
-			}
+			}, nil
 		}
 	}
-	return response, nil
 }
 
 func main() {
@@ -49,11 +60,20 @@ type DivideByZeroError struct {
 	params map[string]int
 }
 
+type MissingParamError struct {
+	params map[string]string
+}
+
+func (m MissingParamError) Error() string {
+	return fmt.Sprintf("Missing required parameters x or y. params: %v", m.params)
+}
+
 func (d *DivideByZeroError) Error() string {
 	return fmt.Sprintf("Cannot divide by zero: Operands %v", d.params)
 }
 
-func divide(x, y int) (int, error) {
+func Divide(x, y int) (int, error) {
+	///time.Sleep(500)
 	if y == 0 {
 		return 0, &DivideByZeroError{params: map[string]int{"x": x, "y": y}}
 	}
