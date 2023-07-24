@@ -4,6 +4,8 @@ export AWS_ACCOUNT_ID='409783107836' #infrastructure account
 echo building $VERSION of $CODE_IMAGE_REPO_NAME
 echo Build started on `date`
 
+set -e
+
 echo Logging in to Amazon ECR...
 aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
 
@@ -20,3 +22,5 @@ docker tag $CODE_IMAGE_REPO_NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_R
 
 echo Pushing the lambda docker image...
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CODE_IMAGE_REPO_NAME:$VERSION
+
+set +e

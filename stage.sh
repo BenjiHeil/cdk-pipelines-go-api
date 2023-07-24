@@ -3,6 +3,8 @@ export VERSION=$(cat semver)
 echo building $VERSION of $CODE_IMAGE_REPO_NAME
 echo Build started on `date`
 
+set -e
+
 echo Building the lambda docker image...          
 docker build --target stage -t $CODE_IMAGE_REPO_NAME:$VERSION ./src
 docker run -v $PWD/out:/out $CODE_IMAGE_REPO_NAME:$VERSION find . -name '*.out' -exec mv -i {} /out/ \;
@@ -15,3 +17,5 @@ while read p; do
         >&2 echo $p ns/op greater than threshold of 500, failing...
     fi
 done < $PWD/out/benchmark.out
+
+set +e

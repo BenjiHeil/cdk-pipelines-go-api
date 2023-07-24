@@ -60,9 +60,9 @@ export class ApiPipelineStack extends cdk.Stack {
         }),
             {
                 pre: [
-                    new pipelines.CodeBuildStep('build-image', {
+                    new pipelines.CodeBuildStep(`build-${apiProps.stage}`, {
                         commands: apiProps.commands,
-                        role: new iam.Role(this, `build-${apiProps.stage}-image-role`, {
+                        role: new iam.Role(this, `build-${apiProps.stage}-role`, {
                             inlinePolicies: {
                                 ['ecr-allow-all']: this.ecrPolicy,
                                 ['sts-assume-role']: this.stsPolicy
