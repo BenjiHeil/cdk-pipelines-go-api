@@ -7,3 +7,5 @@ coverage:
 	grep -o '[0-9]*\.[0-9]*\%' test.out > coverage.out
 benchmark:
 	grep -o '[0-9]*\.[0-9]* ns/op' test.out | sed s#\.[0-9]*.ns\/op##g > benchmark.out
+ci: 
+	make test && make coverage && make benchmark

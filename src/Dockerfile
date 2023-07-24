@@ -1,8 +1,11 @@
-FROM public.ecr.aws/docker/library/golang:1.20 AS builder
+FROM public.ecr.aws/docker/library/golang:1.20 AS build
 COPY . /src
 WORKDIR /src
-RUN make build
-RUN make test && make coverage && make benchmark
+RUN make -s build
+
+FROM build AS stage
+WORKDIR /src
+RUN make -s ci
 
 FROM public.ecr.aws/lambda/go:1
 COPY --from=builder /src/example-api ${LAMBDA_TASK_ROOT}
