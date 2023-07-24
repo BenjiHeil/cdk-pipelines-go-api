@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -74,7 +73,7 @@ func (d *DivideByZeroError) Error() string {
 }
 
 func Divide(x, y int) (int, error) {
-	time.Sleep(2000)
+	//time.Sleep(2000)
 	if y == 0 {
 		return 0, &DivideByZeroError{params: map[string]int{"x": x, "y": y}}
 	}
