@@ -11,11 +11,11 @@ docker build --target stage -t $CODE_IMAGE_REPO_NAME:$VERSION ./src
 docker run -v $PWD/out:/out $CODE_IMAGE_REPO_NAME:$VERSION find . -name '*.out' -exec mv -i {} /out/ \;
 cat $PWD/out/test.out
 
-#check if benchmark over 500 ns/op
+#check if benchmark over 200 ns/op
 while read p; do
-    if [[ $p -gt 2000 ]] 
+    if [[ $p -gt 200 ]] 
     then 
-        >&2 echo $p ns/op greater than threshold of 2000, failing...
+        >&2 echo $p ns/op greater than threshold of 200, failing...
         exit 1
     fi
 done < $PWD/out/benchmark.out
