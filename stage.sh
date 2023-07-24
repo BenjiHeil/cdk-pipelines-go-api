@@ -16,6 +16,7 @@ while read p; do
     if [[ $p -gt 500 ]] 
     then 
         >&2 echo $p ns/op greater than threshold of 500, failing...
+        exit 1
     fi
 done < $PWD/out/benchmark.out
 
