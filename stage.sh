@@ -1,3 +1,4 @@
+#!/bin/bash
 export CODE_IMAGE_REPO_NAME=go-api
 export VERSION=$(cat semver)
 echo building $VERSION of $CODE_IMAGE_REPO_NAME

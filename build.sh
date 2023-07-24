@@ -1,3 +1,4 @@
+#!/bin/bash
 export CODE_IMAGE_REPO_NAME=go-api
 export VERSION=$(cat semver)
 export AWS_ACCOUNT_ID='409783107836' #infrastructure account
