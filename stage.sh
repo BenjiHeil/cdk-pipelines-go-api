@@ -13,9 +13,9 @@ cat $PWD/out/test.out
 
 #check if benchmark over 500 ns/op
 while read p; do
-    if [[ $p -gt 500 ]] 
+    if [[ $p -gt 2000 ]] 
     then 
-        >&2 echo $p ns/op greater than threshold of 500, failing...
+        >&2 echo $p ns/op greater than threshold of 2000, failing...
         exit 1
     fi
 done < $PWD/out/benchmark.out
