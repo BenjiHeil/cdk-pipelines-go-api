@@ -32,14 +32,14 @@ export class ApiPipelineStack extends cdk.Stack {
         this.addAppStage(pipeline, 'sandbox', '682134063971', 'us-east-2', {
             stage: 'sandbox',
             version,
-            commands: ['build.sh']
+            commands: ['./build.sh']
         });
 
         // stage account
         this.addAppStage(pipeline, 'stage', '036162860521', 'us-east-2', {
             stage: 'stage',
             version,
-            commands: ['stage.sh']
+            commands: ['./stage.sh']
             
         });
 
